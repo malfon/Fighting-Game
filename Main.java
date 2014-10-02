@@ -8,7 +8,6 @@ import org.jsfml.window.event.*;
 
 public class Main
 {
-	
 	public static void main(String args[]) throws IOException, InterruptedException
 	{
 		int width=800, height=600;
@@ -18,6 +17,7 @@ public class Main
 		window.setFramerateLimit(60);
 		
 		float frameRate=500, switchFrame=100, frameCounter=0;
+		
 		Clock animTimer = new Clock();
 		Time animDelay;
 		int animSec;
@@ -26,18 +26,16 @@ public class Main
 		final int RIGHT = 2;
 		
 		Vector2i pWalkVec = new Vector2i(0, 0);
-		
-		//Maps
-		
+
 		//UI
-		
+
 		//Fighters
-		Texture ryuuTexture = new Texture();
-		ryuuTexture.loadFromFile(Paths.get("bin/ryuu.png"));
-		Sprite ryuuSprite = new Sprite();
-		ryuuSprite.setTexture(ryuuTexture);
-		ryuuSprite.setPosition(0, height-95);
-		
+		Texture pWalkTexture = new Texture();
+		pWalkTexture.loadFromFile(Paths.get("bin/ryu.png"));
+		Sprite pWalkSprite = new Sprite();
+		pWalkSprite.setTexture(pWalkTexture);
+		pWalkSprite.setPosition(0, height-95);
+
 		while(window.isOpen())
 		{
 			window.clear(Color.WHITE);
@@ -56,36 +54,32 @@ public class Main
 				}
 			}
 			
-			frameCounter += frameRate * animTimer.restart().asSeconds()*3/2;
+			frameCounter += frameRate * animTimer.restart().asSeconds();
 			
-			if(frameCounter >= switchFrame && !Keyboard.isKeyPressed(Key.D) && !Keyboard.isKeyPressed(Key.A))
+			if(frameCounter >= switchFrame)
 			{
 				frameCounter = 0;
-				if((pWalkVec.x*60) < ryuuTexture.getSize().x)
+				if((pWalkVec.x*60) < pWalkTexture.getSize().x)
 				{
-					ryuuSprite.setTextureRect(new IntRect(pWalkVec.x*60, pWalkVec.y*95, 60, 95));
+					pWalkSprite.setTextureRect(new IntRect(pWalkVec.x*60, pWalkVec.y*95, 60, 95));
 					pWalkVec = Vector2i.add(pWalkVec, new Vector2i(1, 0));
 				}
 				else
-				{
-					frameCounter = 0;
 					pWalkVec = new Vector2i(0, 0);
-				}
 			}
 			
 			if(Keyboard.isKeyPressed(Key.D))
 			{
 				pWalkVec = new Vector2i(pWalkVec.x, RIGHT);
-				ryuuSprite.move(1, 0);
+				pWalkSprite.move(1, 0);
 			}
-			
-			if(Keyboard.isKeyPressed(Key.A))
+			else if(Keyboard.isKeyPressed(Key.A))
 			{
 				pWalkVec = new Vector2i(pWalkVec.x, LEFT);
-				ryuuSprite.move(-1, 0);
+				pWalkSprite.move(-1, 0);
 			}
 			
-			window.draw(ryuuSprite);
+			window.draw(pWalkSprite);
 			
 			window.display();
 		}
